@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
+import Editor from 'react-simple-wysiwyg';
 
 const AddNote = ({}) => {
     const [title, setTitle] = useState("");
@@ -73,7 +74,8 @@ const AddNote = ({}) => {
                                     <label htmlFor="noteContent" className="form-label">
                                         Note Content
                                     </label>
-                                    <textarea className="form-control" id="noteContent" placeholder="Enter note content" value={content} onChange={(e) => setContent(e.target.value)} rows="10" />
+                                    {/* <textarea className="form-control" id="noteContent" placeholder="Enter note content" value={content} onChange={(e) => setContent(e.target.value)} rows="10" /> */}
+                                    <Editor containerProps={{ style: { resize: 'vertical', height: "300px" } }} value={content} onChange={(e) => setContent(e.target.value)} />
                                 </div>
                                 <div className="d-grid">
                                     <button type="submit" className="btn btn-primary">
