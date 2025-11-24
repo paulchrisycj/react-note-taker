@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 
-const AddNote = ({}) => {
+const EditNote = ({}) => {
+    const { id } = useParams()
+
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [category, setCategory] = useState("");
@@ -18,26 +20,44 @@ const AddNote = ({}) => {
         if (localStorage.getItem("notes") !== null) {
             setExistingNotes(JSON.parse(localStorage.getItem('notes')))
         }
-        console.log(existingNotes)
     }, []);
+
+    useEffect(() => {
+        if(existingNotes.length === 0){
+            return
+        }
+        const note = existingNotes.find((note) => note.id == id)
+        console.log(note)
+        setTitle(note.title)
+        setCategory(note.category)
+        setContent(note.content)
+        console.log(existingNotes)
+    }, [existingNotes])
 
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        // Step 0: Create a new note
         const newNote = {
-            id: existingNotes.length + 1,
+            id: id,
             title: title,
             content: content,
             category: category,
             date: new Date()
         }
-        const newNotes = [...existingNotes, newNote]
-        setExistingNotes([...existingNotes, newNote])
+        // Step 1: Find the index of the existing note we are trying to edit/replace
+        const noteIndex = existingNotes.findIndex((note) => note.id == id)
+        console.log(noteIndex)
+
+        // Step 2: Make a copy of the existing note in a local block array.
+        const newNotes = existingNotes
+
+        // Step 3: Replace the existing note inside the array with the edited version
+        newNotes[noteIndex] = newNote
+
+        // Step 4: Save the new edited notes list.
         localStorage.setItem('notes', JSON.stringify(newNotes))
-        //Possible Solution
-        // 1. Get the item again from localStorage and replace existingNotes.
-        // 2. Refresh the page programmatically.
-        // 3. 
+
         console.log(localStorage.getItem('notes'))
         navigate("/")
     };
@@ -48,7 +68,7 @@ const AddNote = ({}) => {
                 <div className="col-md-8 col-lg-6">
                     <div className="card shadow">
                         <div className="card-body">
-                            <h2 className="card-title text-center mb-4">Add New Note</h2>
+                            <h2 className="card-title text-center mb-4">Edit Note</h2>
                             <form onSubmit={handleSubmit}>
                                 <div className="mb-3">
                                     <label htmlFor="noteTitle" className="form-label">
@@ -77,7 +97,7 @@ const AddNote = ({}) => {
                                 </div>
                                 <div className="d-grid">
                                     <button type="submit" className="btn btn-primary">
-                                        Add Note
+                                        Edit Note
                                     </button>
                                 </div>
                             </form>
@@ -89,4 +109,4 @@ const AddNote = ({}) => {
     );
 };
 
-export default AddNote;
+export default EditNote;

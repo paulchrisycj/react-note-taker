@@ -1,15 +1,22 @@
-const NoteCard = () => {
+import { useNavigate } from "react-router";
+
+const NoteCard = ({ noteId, noteTitle, noteCategory, noteDate }) => {
+    const navigate = useNavigate()
+
+    const navigateToEdit = () => {
+        navigate(`/edit-note/${noteId}`)
+    }
     return (
-        <div className="card">
+        <div className="col-md-4 card mx-auto my-3">
             <div className="card-body">
-                <h3 className="card-title">Note Title</h3>
+                <h3 className="card-title">{noteTitle}</h3>
 
-                <p className="badge bg-dark rounded-pill">Category</p>
+                <p className="badge bg-dark rounded-pill">{noteCategory}</p>
 
-                <p className="text-gray fs-6">Jul 24 2025</p>
+                <p className="text-gray fs-6">{noteDate}</p>
 
                 <div className="d-flex gap-2">
-                    <button className="btn btn-link text-primary p-0 text-decoration-none">
+                    <button className="btn btn-link text-primary p-0 text-decoration-none" onClick={navigateToEdit}>
                         <i className="bi bi-pencil"></i>
                         Edit
                     </button>
